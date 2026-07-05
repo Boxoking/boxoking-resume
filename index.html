@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>史云浩 — 产品经理</title>
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --text: #17171b;
+            --text-2: #57575f;
+            --text-3: #90909a;
+            --accent: #2563eb;
+            --accent-2: #60a5fa;
+            --accent-glow: rgba(37,99,235,0.15);
+            --accent-soft: #eff4ff;
+            --border: #eaeaec;
+            --white: #ffffff;
+            --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.68;
+            -webkit-font-smoothing: antialiased;
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* ═══════════════ CURSOR ═══════════════ */
+        .cursor-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: width 0.15s, height 0.15s, background 0.15s;
+        }
+        .cursor-ring {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(37,99,235,0.4);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+        }
+        .cursor-ring.hover {
+            width: 56px; height: 56px;
+            border-color: var(--accent-2);
+            background: rgba(37,99,235,0.05);
+            box-shadow: 0 0 30px rgba(37,99,235,0.2);
+        }
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9997;
+        }
+        .cursor-trail canvas {
+            display: block;
+        }
+        @media (max-width: 768px), (hover: none) {
+            body { cursor: auto; }
+            .cursor-dot, .cursor-ring, .cursor-trail { display: none; }
+        }
+
+        /* ═══════════════ PROGRESS ═══════════════ */
+        .progress {
+            position: fixed;
+            top: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent));
+            z-index: 100;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 12px rgba(37,99,235,0.5);
+            transition: width 0.1s linear;
+        }
+
+        /* ═══════════════ FLOATING ORBS ═══════════════ */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.12;
+        }
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, #2563eb, transparent 70%);
+            top: -15%; left: -10%;
+            animation: orbDrift1 20s ease-in-out infinite;
+        }
+        .orb-2 {
+            width: 350px; height: 350px;
+            background: radial-gradient(circle, #60a5fa, transparent 70%);
+            bottom: -10%; right: -8%;
+            animation: orbDrift2 25s ease-in-out infinite;
+        }
+        .orb-3 {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, #3b82f6, transparent 70%);
+            top: 50%; left: 50%;
+            animation: orbDrift3 18s ease-in-out infinite;
+        }
+        @keyframes orbDrift1 {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(60px, 40px); }
+            50% { transform: translate(-20px, 80px); }
+            75% { transform: translate(40px, -30px); }
+        }
+        @keyframes orbDrift2 {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(-50px, -60px); }
+            66% { transform: translate(30px, -20px); }
+        }
+        @keyframes orbDrift3 {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-40px, 30px); }
+        }
+
+        /* ═══════════════ GRAIN ═══════════════ */
+        .grain {
+            position: fixed; inset: 0;
+            pointer-events: none; z-index: 999;
+            opacity: 0.022;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 180px 180px;
+        }
+
+        /* ═══════════════ WRAPPER ═══════════════ */
+        .wrapper {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 0 60px;
+            position: relative;
+            z-index: 1;
+        }
+        @media (max-width: 900px) { .wrapper { padding: 0 32px; } }
+        @media (max-width: 480px) { .wrapper { padding: 0 20px; } }
+
+        /* ═══════════════ NAVBAR (v5) ═══════════════ */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 200;
+            background: #000000;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            gap: 20px;
+        }
+        .navbar-name {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            margin-right: auto;
+            flex-shrink: 0;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .nav-link {
+            color: rgba(255,255,255,0.72);
+            text-decoration: none;
+            font-size: 12.5px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            transition: all 0.25s;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            cursor: none;
+        }
+        .nav-link:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.1);
+        }
+        .nav-dl {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--accent);
+            color: #ffffff !important;
+            text-decoration: none;
+            font-size: 12.5px;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-weight: 650;
+            letter-spacing: 0.5px;
+            transition: all 0.25s;
+            cursor: none;
+            margin-left: 2px;
+        }
+        .nav-dl:hover {
+            background: #1d4ed8;
+            box-shadow: 0 0 24px rgba(37,99,235,0.45);
+            transform: translateY(-1px);
+        }
+        .nav-dl svg { width: 14px; height: 14px; flex-shrink: 0; }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 16px; gap: 4px; }
+            .nav-link { font-size: 10px; padding: 5px 7px; }
+            .nav-dl { font-size: 10px; padding: 5px 10px; }
+            .navbar-name { font-size: 14px; }
+        }
+        @media (max-width: 480px) {
+            .navbar { padding: 0 10px; gap: 2px; }
+            .nav-link { font-size: 9px; padding: 4px 5px; letter-spacing: 0; }
+            .nav-dl { font-size: 9px; padding: 4px 7px; }
+            .navbar-name { font-size: 13px; }
+        }
+
+        /* ═══════════════ COPY TIP (v5) ═══════════════ */
+        .copy-target { position: relative; cursor: pointer; }
+        .copy-tip {
+            position: absolute;
+            top: -34px; left: 50%;
+            transform: translateX(-50%);
+            background: #000; color: #fff;
+            font-size: 11px; padding: 4px 10px;
+            border-radius: 4px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .copy-tip.show { opacity: 1; }
+
+        /* ═══════════════ THESIS (v5) ═══════════════ */
+        .thesis {
+            margin-top: 24px;
+            padding: 24px 28px;
+            background: #fafbfd;
+            border-left: 3px solid var(--accent);
+            border-radius: 0 10px 10px 0;
+        }
+        .thesis-label {
+            font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+            color: var(--accent); text-transform: uppercase; margin-bottom: 8px;
+        }
+        .thesis-title {
+            font-size: 16px; font-weight: 700; margin-bottom: 6px;
+            line-height: 1.5; color: var(--text);
+        }
+        .thesis-desc {
+            font-size: 13.8px; color: var(--text-2); line-height: 1.78;
+        }
+
+        /* ═══════════════ QUALITIES (v5) ═══════════════ */
+        .quality-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 32px;
+        }
+        .quality-card {
+            padding: 28px 30px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.35s;
+        }
+        .quality-card:hover {
+            border-color: var(--accent-2);
+            box-shadow: 0 8px 28px rgba(37,99,235,0.06);
+            transform: translateY(-2px);
+        }
+        .quality-head {
+            font-size: 15px; font-weight: 700; color: var(--accent);
+            margin-bottom: 8px; letter-spacing: 0.3px;
+        }
+        .quality-desc {
+            font-size: 13.5px; color: var(--text-2); line-height: 1.75;
+        }
+
+        .strength-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 32px;
+        }
+        .strength-item {
+            padding: 20px 24px;
+            background: #fafbfd;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .strength-item:hover {
+            border-color: var(--accent-2);
+            background: var(--accent-soft);
+        }
+        .strength-head {
+            font-size: 14px; font-weight: 700; color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .strength-desc {
+            font-size: 13px; color: var(--text-2); line-height: 1.7;
+        }
+
+        .motto {
+            text-align: center;
+            padding: 20px 0 8px;
+        }
+        .motto-line {
+            width: 40px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 0 auto 14px;
+        }
+        .motto-text {
+            font-size: 17px; font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 700px) {
+            .quality-grid, .strength-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 480px) {
+            .thesis { padding: 18px 20px; }
+        }
+
+        /* ═══════════════ ADJUST HERO FOR NAVBAR ═══════════════ */
+        .hero { padding-top: 54px; }
+
+
+        /* ═══════════════ HERO ═══════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            padding: 100px 0 80px;
+        }
+        .hero-greeting {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.1s forwards;
+        }
+        .hero-name {
+            font-size: clamp(52px, 9vw, 88px);
+            font-weight: 850;
+            letter-spacing: -1px;
+            line-height: 1.03;
+            margin-bottom: 12px;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.2s forwards;
+            color: #000000;
+        }
+        .hero-title {
+            font-size: clamp(16px, 2.8vw, 22px);
+            font-weight: 500;
+            color: var(--text-2);
+            letter-spacing: 1.5px;
+            margin-bottom: 36px;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.35s forwards;
+        }
+        .hero-accent-line {
+            width: 56px; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+            border-radius: 1px;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.45s forwards, glowPulse 2.5s ease-in-out 1s infinite;
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 4px rgba(37,99,235,0.3); }
+            50% { box-shadow: 0 0 16px rgba(37,99,235,0.6); }
+        }
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.55s forwards;
+        }
+        .hero-meta a, .hero-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-2);
+            text-decoration: none;
+            padding: 9px 18px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s;
+        }
+        .hero-meta a:hover, .hero-meta span:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-soft);
+            box-shadow: 0 0 0 6px var(--accent-glow), 0 8px 24px rgba(37,99,235,0.1);
+            transform: translateY(-2px);
+        }
+        .hero-meta svg { width: 14px; height: 14px; opacity: 0.45; flex-shrink: 0; }
+        .hero-scroll {
+            margin-top: 56px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--text-3);
+            opacity: 0;
+            animation: fadeSlideUp 0.7s 0.7s forwards;
+        }
+        .hero-scroll-bar {
+            width: 40px; height: 1px;
+            background: var(--text-3);
+            animation: scrollBarPulse 2s ease-in-out infinite;
+            border-radius: 1px;
+        }
+        @keyframes scrollBarPulse {
+            0%, 100% { width: 40px; opacity: 0.25; }
+            50% { width: 70px; opacity: 0.7; }
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(32px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══════════════ SECTION ═══════════════ */
+        .section { padding: 72px 0; position: relative; z-index: 1; }
+        .section-spacer {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 0 auto;
+            max-width: 1040px;
+            padding: 0 60px;
+        }
+        @media (max-width: 900px) { .section-spacer { padding: 0 32px; } }
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0.15;
+        }
+        .section-heading {
+            font-size: clamp(28px, 4.5vw, 42px);
+            font-weight: 780;
+            letter-spacing: 0.3px;
+            margin-bottom: 44px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 0;
+            width: 100%; height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .section-heading.revealed::after { transform: scaleX(1); }
+
+        /* ═══════════════ REVEAL ═══════════════ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: translateY(0); }
+        .stagger.visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
+        .stagger.visible > *:nth-child(3) { transition-delay: 0.24s; opacity: 1; transform: translateY(0); }
+        .stagger.visible > *:nth-child(4) { transition-delay: 0.36s; opacity: 1; transform: translateY(0); }
+
+        /* ═══════════════ EDUCATION ═══════════════ */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        .edu-card {
+            padding: 34px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            background: var(--white);
+            transform-style: preserve-3d;
+            perspective: 800px;
+        }
+        .edu-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent 30%, var(--accent-2), transparent 70%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .edu-card:hover::before { opacity: 1; }
+        .edu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(37,99,235,0.1);
+        }
+        .edu-level {
+            font-size: 10px; font-weight: 700; letter-spacing: 2px;
+            color: var(--accent); text-transform: uppercase; margin-bottom: 10px;
+        }
+        .edu-school { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .edu-major { font-size: 14px; color: var(--text-2); margin-bottom: 14px; }
+        .edu-time { font-size: 12px; color: var(--text-3); font-weight: 500; }
+        @media (max-width: 600px) { .edu-grid { grid-template-columns: 1fr; } }
+
+        /* ═══════════════ WORK ═══════════════ */
+        .work-list { display: flex; flex-direction: column; gap: 48px; }
+        .work-item {
+            position: relative;
+            padding: 28px 0 28px 24px;
+        }
+        .work-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent);
+            border-radius: 1px;
+        }
+        .work-item::after {
+            content: '';
+            position: absolute;
+            left: -4px; top: 8px;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 6px var(--accent-glow);
+            animation: dotPulse 3s ease-in-out infinite;
+        }
+        @keyframes dotPulse {
+            0%, 100% { box-shadow: 0 0 0 6px var(--accent-glow); }
+            50% { box-shadow: 0 0 0 12px rgba(37,99,235,0.06); }
+        }
+        .work-header {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .work-company { font-size: 23px; font-weight: 700; letter-spacing: 0.2px; }
+        .work-role-tag {
+            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+            color: var(--accent); background: var(--accent-soft);
+            padding: 3px 10px; border-radius: 4px;
+        }
+        .work-time { font-size: 12px; color: var(--text-3); font-weight: 500; margin-left: auto; }
+        .work-summary {
+            font-size: 15px; color: var(--text-2); line-height: 1.78;
+            margin-bottom: 16px; font-weight: 440;
+        }
+        .work-points { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .work-points li {
+            font-size: 13.8px; line-height: 1.72;
+            padding-left: 18px; position: relative; color: var(--text);
+        }
+        .work-points li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 9px;
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.4;
+        }
+        .work-points li strong { font-weight: 650; }
+        .work-points li strong::after { content: '　'; }
+
+        /* ═══════════════ WORK KPI (v5) ═══════════════ */
+        .work-kpi-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .work-kpi {
+            font-size: 11.5px;
+            font-weight: 650;
+            letter-spacing: 0.3px;
+            padding: 5px 12px;
+            border-radius: 6px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            border: 1px solid rgba(37,99,235,0.12);
+            transition: all 0.3s;
+        }
+        .work-kpi:hover {
+            background: #dbeafe;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+        }
+        .hl {
+            color: var(--accent);
+            font-weight: 650;
+            background: linear-gradient(to top, var(--accent-soft) 38%, transparent 38%);
+            padding: 0 2px;
+        }
+        @media (max-width: 640px) {
+            .work-item { padding-left: 16px; }
+            .work-time { margin-left: 0; }
+        }
+
+        /* ═══════════════ PROJECTS ═══════════════ */
+        .project-list { display: flex; flex-direction: column; gap: 18px; }
+        .project-card {
+            padding: 32px 34px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--white);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .project-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, transparent 40%, var(--accent-2), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .project-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(37,99,235,0.05), transparent 45%);
+            opacity: 0;
+            transition: opacity 0.35s;
+            pointer-events: none;
+        }
+        .project-card:hover::before { opacity: 1; }
+        .project-card:hover::after { opacity: 1; }
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(37,99,235,0.08), 0 0 0 1px rgba(37,99,235,0.04);
+        }
+        .project-top {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 6px;
+            position: relative;
+            z-index: 1;
+        }
+        .project-name { font-size: 21px; font-weight: 700; letter-spacing: 0.2px; }
+        .project-badge {
+            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+            color: var(--accent);
+        }
+        .project-time { font-size: 12px; color: var(--text-3); font-weight: 500; margin-left: auto; }
+        .project-points {
+            list-style: none; display: flex; flex-direction: column;
+            gap: 5px; margin-top: 10px; position: relative; z-index: 1;
+        }
+        .project-points li {
+            font-size: 13.5px; color: var(--text-2); line-height: 1.7;
+            padding-left: 14px; position: relative;
+        }
+        .project-points li::before {
+            content: '—'; position: absolute; left: 0; top: 0;
+            color: var(--text-3); font-size: 10px;
+        }
+        .project-hint {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 11px; font-weight: 650; color: var(--accent);
+            letter-spacing: 0.5px; margin-top: 14px;
+            opacity: 0; transform: translateX(-10px);
+            transition: all 0.4s; position: relative; z-index: 1;
+        }
+        .project-card:hover .project-hint { opacity: 1; transform: translateX(0); }
+        .project-hint svg { width: 13px; height: 13px; transition: transform 0.3s; }
+        .project-card:hover .project-hint svg { transform: translateX(4px); }
+        @media (max-width: 640px) {
+            .project-time { margin-left: 0; }
+            .project-hint { opacity: 0.5; transform: translateX(0); }
+        }
+
+        /* ═══════════════ SKILLS ═══════════════ */
+        .skill-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+        .skill-pill {
+            font-size: 14px; font-weight: 500;
+            padding: 10px 22px; border-radius: 50px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            color: var(--text-2);
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
+        }
+        .skill-pill::before {
+            content: '';
+            position: absolute; inset: 0; border-radius: 50px;
+            background: radial-gradient(circle at var(--px, 50%) var(--py, 50%), rgba(37,99,235,0.1), transparent 55%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .skill-pill:hover::before { opacity: 1; }
+        .skill-pill:hover {
+            border-color: var(--accent-2);
+            color: var(--accent);
+            background: var(--accent-soft);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 28px rgba(37,99,235,0.15), 0 0 0 4px rgba(37,99,235,0.04);
+        }
+
+        /* ═══════════════ ABOUT ═══════════════ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 48px;
+            align-items: center;
+        }
+        .about-text {
+            font-size: 16px; line-height: 1.9; color: var(--text-2);
+        }
+        .about-text strong { color: var(--text); font-weight: 650; }
+        .about-stats {
+            display: flex; flex-direction: column; gap: 18px;
+            padding: 34px 36px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--white);
+        }
+        .about-stat { text-align: center; }
+        .about-stat-num {
+            font-size: 40px; font-weight: 800; letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+        .about-stat-lbl {
+            font-size: 10px; letter-spacing: 2px; color: var(--text-3);
+            margin-top: 4px; text-transform: uppercase;
+        }
+        @media (max-width: 700px) {
+            .about-grid { grid-template-columns: 1fr; gap: 24px; }
+            .about-stats { flex-direction: row; justify-content: space-around; padding: 24px; }
+        }
+
+        /* ═══════════════ FOOTER ═══════════════ */
+        .footer { padding: 56px 0; text-align: center; position: relative; z-index: 1; }
+        .footer-links {
+            display: flex; justify-content: center; gap: 32px;
+            flex-wrap: wrap; margin-bottom: 22px;
+        }
+        .footer-links a {
+            font-size: 13px; color: var(--text-2); text-decoration: none;
+            font-weight: 500; transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-copy { font-size: 10px; color: var(--text-3); letter-spacing: 2px; }
+
+        /* ═══════════════ MODAL ═══════════════ */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(15,15,18,0.55);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 500;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.35s;
+        }
+        .modal-overlay.open { opacity: 1; pointer-events: auto; }
+        .modal {
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            max-width: 520px; width: 100%;
+            max-height: 80vh; overflow-y: auto;
+            border: 1px solid rgba(37,99,235,0.1);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+            transform: translateY(28px) scale(0.95);
+            transition: transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+        .modal-head {
+            padding: 32px 34px 0;
+            display: flex; justify-content: space-between;
+            align-items: flex-start; gap: 16px;
+        }
+        .modal-head h3 { font-size: 22px; font-weight: 700; }
+        .modal-head .modal-sub {
+            font-size: 11px; color: var(--text-3);
+            margin-top: 4px; letter-spacing: 1px;
+        }
+        .modal-close {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--white);
+            cursor: pointer; font-size: 16px;
+            color: var(--text-3);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .modal-close:hover { background: #fdf2f2; color: #d92d20; border-color: #fecaca; }
+        .modal-body { padding: 18px 34px 36px; }
+        .modal-body ul { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+        .modal-body ul li {
+            font-size: 14px; line-height: 1.8;
+            padding-left: 16px; position: relative;
+        }
+        .modal-body ul li::before {
+            content: ''; position: absolute; left: 0; top: 9px;
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent); opacity: 0.5;
+        }
+
+        /* ═══════════════ PRINT ═══════════════ */
+        @media print {
+            body { cursor: auto; background: white; }
+            .cursor-dot, .cursor-ring, .cursor-trail, .progress,
+            .grain, .orb, .hero-particles, .project-hint, .navbar { display: none !important; }
+            .reveal, .stagger > * { opacity: 1 !important; transform: none !important; }
+            .section { padding: 28px 0; page-break-inside: avoid; }
+            .hero { min-height: auto; }
+            .hero-name { color: #000000 !important; }
+            .about-stat-num { -webkit-text-fill-color: #2563eb !important; }
+            .section-heading::after { display: none; }
+            .project-card, .edu-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-trail"><canvas id="trailCanvas"></canvas></div>
+
+    <!-- Progress -->
+    <div class="progress" id="progressBar"></div>
+
+    <!-- Grain -->
+    <div class="grain"></div>
+
+    <!-- ═══════════ NAVBAR (v5) ═══════════ -->
+    <nav class="navbar">
+        <a href="#top" class="navbar-name">史云浩</a>
+        <div class="nav-links">
+            <a href="#top" class="nav-link">简介</a>
+            <a href="#education" class="nav-link">教育</a>
+            <a href="#work" class="nav-link">工作</a>
+            <a href="#projects" class="nav-link">项目</a>
+            <a href="#qualities" class="nav-link">素质</a>
+            <a href="史云浩简历.pdf" class="nav-dl" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                下载简历
+            </a>
+        </div>
+    </nav>
+
+
+    <!-- Floating orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- ═══════════ HERO ═══════════ -->
+    <header class="hero" id="top">
+        <canvas class="hero-particles" id="heroParticles"></canvas>
+        <div class="wrapper hero-content">
+            <p class="hero-greeting">Product Manager &amp; Industrial Designer</p>
+            <h1 class="hero-name">史云浩</h1>
+            <p class="hero-title">B端产品 · 工业设计背景 · 聚焦 AI 赋能智能制造</p>
+            <div class="hero-accent-line"></div>
+            <div class="hero-meta">
+                <span class="copy-target" data-copy="1537595120@qq.com">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    1537595120@qq.com
+                    <span class="copy-tip">已复制</span>
+                </span>
+                <span class="copy-target" data-copy="15153280471">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    15153280471
+                    <span class="copy-tip">已复制</span>
+                </span>
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    上海徐汇
+                </span>
+                <span>产品经理</span>
+                <span>一周4-5天 · 3-6个月</span>
+            </div>
+            <p class="hero-intro" style="margin-top:20px;font-size:15px;color:var(--text-2);line-height:1.85;max-width:680px;opacity:0;animation:fadeSlideUp 0.7s 0.6s forwards;">产品经理方向，具备工业设计与智能制造项目背景。参与 B 端制造业 APS、智能排产与 AIGC 平台项目，熟悉业务流程调研、数据字段标准化、原型设计与自动化流程落地，关注 AI 工具在企业数字化和产品决策中的应用。</p>
+            <div class="hero-scroll">
+                <span>SCROLL</span>
+                <div class="hero-scroll-bar"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════ EDUCATION ═══════════ -->
+    <section class="section" id="education">
+        <div class="wrapper">
+            <p class="section-label">教育经历</p>
+            <h2 class="section-heading" data-reveal-heading>学术背景</h2>
+            <div class="edu-grid stagger">
+                <div class="edu-card" data-tilt>
+                    <p class="edu-level">硕士 · 211 双一流</p>
+                    <h3 class="edu-school">华东理工大学</h3>
+                    <p class="edu-major">机械 — 工业设计工程</p>
+                    <p class="edu-time">2024.09 — 至今</p>
+                </div>
+                <div class="edu-card" data-tilt>
+                    <p class="edu-level">本科</p>
+                    <h3 class="edu-school">山东科技大学</h3>
+                    <p class="edu-major">工学 — 工业设计</p>
+                    <p class="edu-time">2018.09 — 2022.07</p>
+                </div>
+            </div>
+            <div class="thesis reveal">
+                <p class="thesis-label">论文研究</p>
+                <p class="thesis-title">AI 驱动的产品个性化设计与感性需求转译研究</p>
+                <p class="thesis-desc">聚焦 AI 驱动的产品个性化设计与用户感性需求转译，研究将用户模糊风格偏好量化为可计算设计依据，结合智能生成、形态优化与材质决策，构建从用户偏好识别、方案生成到设计验证的闭环流程，提升产品设计的智能化、个性化与决策效率。</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-spacer"></div>
+
+    <!-- ═══════════ WORK ═══════════ -->
+    <section class="section" id="work">
+        <div class="wrapper">
+            <p class="section-label">工作经历</p>
+            <h2 class="section-heading" data-reveal-heading>实践经验</h2>
+            <div class="work-list">
+                <div class="work-item reveal">
+                    <div class="work-header">
+                        <span class="work-company">上海智聆信息技术有限公司</span>
+                        <span class="work-role-tag">产品经理实习生</span>
+                        <span class="work-time">2025.08 — 2025.12</span>
+                    </div>
+                    <p class="work-summary">负责食品、拉链两大制造行业 APS 系统核心模块设计与落地，支撑生产计划效率大幅提升。</p>
+                    <ul class="work-points">
+                        <li><strong>生产数据规范</strong>深入多个车间全流程调研，访谈车间主管与计划员，定义 <span class="hl">50+ 核心生产数据字段</span>，编写《基础数据维护规范》并组织专项培训，使需求偏差率显著降低，评审通过率大幅提升，对接时间大幅缩短。</li>
+                        <li><strong>排产规则设计</strong>针对食品行业「产品互斥」和拉链行业「换产成本高」等实际难题，梳理并设计排产决策逻辑，将复杂业务规则转化成 <span class="hl">20+ 张逻辑清晰的流程图</span>，系统自动避开生产冲突并智能分配机台，换产损失有效降低。</li>
+                        <li><strong>自动排产落地</strong>主导设计「订单录入—库存核对—自动排产—任务下发」的闭环自动化流程，引入实时库存核准与动态产能校验机制，使排产时间从 <span class="hl">4 小时压缩至 15 分钟以内</span>，准确率提升至 <span class="hl">95% 以上</span>。</li>
+                        <li><strong>工厂端优化</strong>针对操作员年龄偏大、作业环境复杂的特点，通过「颜色管理」和简化流程，把复杂操作改成「一键直达」，工人上手周期 <span class="hl">缩短 30%</span>，确保多个大客户项目高标准交付。</li>
+                    </ul>
+                    <div class="work-kpi-row">
+                        <span class="work-kpi">排产效率提升 16×</span>
+                        <span class="work-kpi">准确率 95%+</span>
+                        <span class="work-kpi">上手周期 -30%</span>
+                        <span class="work-kpi">50+ 数据字段</span>
+                    </div>
+                </div>
+
+                <div class="work-item reveal">
+                    <div class="work-header">
+                        <span class="work-company">厦门狄耐克智能科技股份有限公司</span>
+                        <span class="work-role-tag">产品实习生</span>
+                        <span class="work-time">2024.05 — 2024.09</span>
+                    </div>
+                    <p class="work-summary">负责多款弱电安防硬件产品的需求定义、工业设计方案产出、跨部门协同研发及量产工艺验证。</p>
+                    <ul class="work-points">
+                        <li><strong>硬件需求定义</strong>通过深度客户访谈与竞品分析，挖掘出音量调节、远距离识别等 <span class="hl">5 项核心需求</span>，结合使用场景分析输出产品需求文档，全面考量人机工程、成本控制等多维度因素。</li>
+                        <li><strong>方案协同推进</strong>协同 UI、结构工程及制造端团队评审设计方案，输出产品设计规范与交互原型，推动 <span class="hl">5+ 版方案迭代</span>并完整记录反馈意见，兼顾功能完整性与视觉美感、可制造性。</li>
+                        <li><strong>量产验证优化</strong>配合结构团队完成多轮三维建模与渲染方案迭代，组织多轮用户体验测试，方案综合满意度提升至 <span class="hl">90% 以上</span>，与制造端协作验证加工工艺可行性，确保批产良品率 <span class="hl">≥98%</span>。</li>
+                    </ul>
+                    <div class="work-kpi-row">
+                        <span class="work-kpi">满意度 90%+</span>
+                        <span class="work-kpi">良品率 ≥98%</span>
+                        <span class="work-kpi">5+ 版迭代</span>
+                    </div>
+                </div>
+
+                <div class="work-item reveal">
+                    <div class="work-header">
+                        <span class="work-company">青岛经纬伟业电子科技有限公司</span>
+                        <span class="work-role-tag">技术支持工程师</span>
+                        <span class="work-time">2022.07 — 2023.09</span>
+                    </div>
+                    <ul class="work-points">
+                        <li><strong>技术支持</strong>完善教室、部队、研究所等场所的物联网设备与电子系统，在项目现场收集使用反馈，整理用户在交互、响应速度、信息展示等方面的改进意见，协助测试设备与系统在不同应用环境下的性能，识别并分析关键故障点。</li>
+                        <li><strong>多方协作</strong>与客户方密切沟通，协调资源与需求差异，推动项目按计划推进；参与产品从功能验证到现场部署与验收的全流程，确保各环节顺畅衔接并高质量交付。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-spacer"></div>
+
+    <!-- ═══════════ PROJECTS ═══════════ -->
+    <section class="section" id="projects">
+        <div class="wrapper">
+            <p class="section-label">项目经历</p>
+            <h2 class="section-heading" data-reveal-heading>重点项目</h2>
+            <div class="project-list">
+                <div class="project-card reveal" data-project="0" data-mouse-track data-tilt-card>
+                    <div class="project-top">
+                        <h3 class="project-name">上海电气 · 泛人型机器人开发</h3>
+                        <span class="project-badge">项目负责人</span>
+                        <span class="project-time">2025.11 — 2026.05</span>
+                    </div>
+                    <ul class="project-points">
+                        <li>对接甲方需求并预判风险，将复杂要求转化为详细的功能清单，确保项目权责清晰且按时交付。</li>
+                        <li>主导外观设计与材料选型，协调团队进行干涉校验，在保证机械伸缩顺畅的同时实现美感与量产平衡。</li>
+                    </ul>
+                    <div class="project-hint">
+                        查看详情
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal" data-project="1" data-mouse-track data-tilt-card style="cursor:pointer">
+                    <div class="project-top">
+                        <h3 class="project-name">安井食品 · 智能排产 APS 系统 🔗</h3>
+                        <span class="project-badge">产品负责人</span>
+                        <span class="project-time">2025.09 — 2025.12</span>
+                    </div>
+                    <ul class="project-points">
+                        <li>深入调研工厂全工序，将复杂的现场业务用语转化为 <span class="hl">50 项标准化系统字段</span>，完成从物理工厂到数字模型的精准映射。</li>
+                        <li>主导设计全流程自动排产功能，将原本 <span class="hl">4 小时人工计算缩短至 15 分钟</span>，准确率提升至 <span class="hl">95% 以上</span>，显著降低了时间成本。</li>
+                    </ul>
+                    <div class="project-hint">
+                        查看 Demo
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </div>
+                </div>
+
+                <div class="project-card reveal" data-project="2" data-mouse-track data-tilt-card>
+                    <div class="project-top">
+                        <h3 class="project-name">红色文化 · AIGC 大模型平台</h3>
+                        <span class="project-badge">产品负责人</span>
+                        <span class="project-time">2024.11 — 2025.07</span>
+                    </div>
+                    <ul class="project-points">
+                        <li>负责馆方素材的标签化处理，构建包含 <span class="hl">1.5 万条数据、120 个关键词</span> 的知识库，为模型训练提供精准的数据支撑。</li>
+                        <li>产出多版本高保真原型，推动红色文化资源从符号提取到智能化创意生成的转化，实现了平台核心交互流程的闭环设计。</li>
+                    </ul>
+                    <div class="project-hint">
+                        查看详情
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-spacer"></div>
+
+    <!-- ═══════════ QUALITIES (v5) ═══════════ -->
+    <section class="section" id="qualities">
+        <div class="wrapper">
+            <p class="section-label">综合素质</p>
+            <h2 class="section-heading" data-reveal-heading>能力与优势</h2>
+
+            <div class="quality-grid stagger" style="grid-template-columns:1fr;">
+                <div class="quality-card">
+                    <p class="quality-head">AI 协作开发与原型验证</p>
+                    <p class="quality-desc">已搭建 Claude Code、DeepSeek V4 Pro、VS Code 等 AI 编程工具链，能够借助 AI 辅助理解代码逻辑、调试脚本、整理项目结构，并用于快速验证产品功能设想与基础 Demo 原型。</p>
+                </div>
+                <div class="quality-card">
+                    <p class="quality-head">用户数据理解与语义分析</p>
+                    <p class="quality-desc">具备在线评论分析、用户需求归纳与语义信息提取经验，能够结合 LLM、Excel、Python 等工具完成非结构化文本的清洗、分类、标签化与需求洞察，为产品配置决策和功能优先级判断提供依据。</p>
+                </div>
+                <div class="quality-card">
+                    <p class="quality-head">三维建模与产品方案表达</p>
+                    <p class="quality-desc">具备 Rhino、Creo、KeyShot 等工业设计软件基础，能够完成产品形态建模、结构关系表达、概念渲染与方案可视化输出，将抽象产品需求转化为直观的设计方案与评审材料。</p>
+                </div>
+                <div class="quality-card">
+                    <p class="quality-head">AI 工具实践与技术转化意识</p>
+                    <p class="quality-desc">持续关注 Claude Code、DeepSeek、Dify、Cursor 等 AI 工具在产品研发、知识库构建、Agent 工作流和 To B 场景中的应用，注重将新技术能力转化为可执行的产品流程与效率提升方案。</p>
+                </div>
+            </div>
+
+            <div class="strength-grid stagger">
+                <div class="strength-item">
+                    <p class="strength-head">目标拆解</p>
+                    <p class="strength-desc">习惯将复杂任务拆分为需求分析、方法选择、方案验证和结果复盘等阶段，推动问题从模糊想法转化为可执行路径。</p>
+                </div>
+                <div class="strength-item">
+                    <p class="strength-head">跨界迁移</p>
+                    <p class="strength-desc">从工业设计训练延展至 AI 工具、产品经理方法和数据分析能力，能够在设计、技术与产品之间建立连接。</p>
+                </div>
+                <div class="strength-item">
+                    <p class="strength-head">需求转译</p>
+                    <p class="strength-desc">关注用户评论、访谈反馈和实际使用场景，能够将分散的用户表达转化为功能需求、配置要素和设计判断依据。</p>
+                </div>
+                <div class="strength-item">
+                    <p class="strength-head">工具化执行</p>
+                    <p class="strength-desc">重视通过 AI 工具、数据工具和设计软件提升工作效率，能够围绕具体任务搭建适合的工具链和验证流程。</p>
+                </div>
+            </div>
+
+            <!-- stats & personal advantage removed per user feedback -->
+
+            <div class="motto reveal">
+                <div class="motto-line"></div>
+                <p class="motto-text">从用户需求出发，以 AI 工具推动产品决策与设计表达。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════ FOOTER ═══════════ -->
+    <footer class="footer">
+        <div class="wrapper">
+            <div class="section-spacer" style="margin-bottom:40px;"></div>
+            <div class="footer-links">
+                <a href="mailto:1537595120@qq.com">1537595120@qq.com</a>
+                <a href="tel:15153280471">15153280471</a>
+                <a href="#top">回到顶部 ↑</a>
+            </div>
+            <p class="footer-copy">© 2026 史云浩</p>
+        </div>
+    </footer>
+
+    <!-- ═══════════ MODAL ═══════════ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent"></div>
+    </div>
+
+    <script>
+    (() => {
+
+    // ══════════ CURSOR ══════════
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    const trailCanvas = document.getElementById('trailCanvas');
+    let mx = 0, my = 0, cx = 0, cy = 0;
+    let trailPoints = [];
+    let hasCursor = false;
+
+    if (dot && ring && trailCanvas && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+        hasCursor = true;
+        const ctx = trailCanvas.getContext('2d');
+        trailCanvas.width = window.innerWidth;
+        trailCanvas.height = window.innerHeight;
+
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            trailPoints.push({ x: mx, y: my, life: 1, r: Math.random() * 1.8 + 0.5 });
+            if (trailPoints.length > 30) trailPoints.shift();
+        });
+
+        function animateCursor() {
+            cx += (mx - cx) * 0.25;
+            cy += (my - cy) * 0.25;
+            dot.style.left = cx - 3 + 'px';
+            dot.style.top = cy - 3 + 'px';
+            ring.style.left = cx - 14 + 'px';
+            ring.style.top = cy - 14 + 'px';
+
+            // Trail
+            ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+            for (let i = 0; i < trailPoints.length; i++) {
+                const p = trailPoints[i];
+                p.life -= 0.035;
+                if (p.life <= 0) continue;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(37,99,235,${p.life * 0.35})`;
+                ctx.fill();
+            }
+            trailPoints = trailPoints.filter(p => p.life > 0);
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+        window.addEventListener('resize', () => {
+            trailCanvas.width = window.innerWidth;
+            trailCanvas.height = window.innerHeight;
+        });
+
+        const hovers = document.querySelectorAll('a, button, .hero-meta span, .hero-meta .copy-target, .project-card, .skill-pill, .edu-card, .work-item, .about-stats, .nav-link, .nav-dl, .quality-card, .strength-item');
+        hovers.forEach(el => {
+            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+    }
+
+    // ══════════ PROGRESS BAR ══════════
+    const progress = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+    }, { passive: true });
+
+    // ══════════ HERO PARTICLES ══════════
+    const heroCanvas = document.getElementById('heroParticles');
+    if (heroCanvas) {
+        const hctx = heroCanvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            const rect = heroCanvas.parentElement.getBoundingClientRect();
+            heroCanvas.width = rect.width;
+            heroCanvas.height = rect.height;
+            const count = Math.floor((rect.width * rect.height) / 12000);
+            particles = [];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * rect.width,
+                    y: Math.random() * rect.height,
+                    r: Math.random() * 1.4 + 0.3,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    alpha: Math.random() * 0.5 + 0.1,
+                    pulse: Math.random() * Math.PI * 2
+                });
+            }
+        }
+
+        function drawParticles(time) {
+            hctx.clearRect(0, 0, heroCanvas.width, heroCanvas.height);
+            for (const p of particles) {
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0) p.x = heroCanvas.width;
+                if (p.x > heroCanvas.width) p.x = 0;
+                if (p.y < 0) p.y = heroCanvas.height;
+                if (p.y > heroCanvas.height) p.y = 0;
+
+                const alpha = p.alpha + Math.sin(time * 0.001 + p.pulse) * 0.12;
+                hctx.beginPath();
+                hctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                hctx.fillStyle = `rgba(37,99,235,${Math.max(0.03, alpha)})`;
+                hctx.fill();
+            }
+
+            // Connect nearby
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 100) {
+                        hctx.beginPath();
+                        hctx.moveTo(particles[i].x, particles[i].y);
+                        hctx.lineTo(particles[j].x, particles[j].y);
+                        hctx.strokeStyle = `rgba(37,99,235,${0.025 * (1 - dist / 100)})`;
+                        hctx.lineWidth = 0.5;
+                        hctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(drawParticles);
+        }
+
+        initParticles();
+        requestAnimationFrame(drawParticles);
+        window.addEventListener('resize', initParticles);
+    }
+
+    // ══════════ REVEAL ON SCROLL ══════════
+    const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    document.querySelectorAll('.stagger').forEach(el => revealObserver.observe(el));
+
+    // Heading underline
+    const headingObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+    }, { threshold: 0.7 });
+    document.querySelectorAll('[data-reveal-heading]').forEach(h => headingObserver.observe(h));
+
+    // ══════════ MOUSE TRACK ══════════
+    document.querySelectorAll('[data-mouse-track]').forEach(el => {
+        el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            el.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+            el.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+        });
+    });
+
+    document.querySelectorAll('[data-mouse-pill]').forEach(pill => {
+        pill.addEventListener('mousemove', e => {
+            const rect = pill.getBoundingClientRect();
+            pill.style.setProperty('--px', (e.clientX - rect.left) + 'px');
+            pill.style.setProperty('--py', (e.clientY - rect.top) + 'px');
+        });
+    });
+
+    // ══════════ 3D TILT ══════════
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `perspective(800px) rotateY(${x * 4}deg) rotateX(${-y * 4}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+        });
+    });
+
+    // ══════════ 3D TILT (project cards) ══════════
+    document.querySelectorAll('[data-tilt-card]').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `perspective(1000px) rotateY(${x * 3}deg) rotateX(${-y * 3}deg) translateY(-3px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+        });
+    });
+
+    // ══════════ COUNT UP ══════════
+    let counted = false;
+    const countObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting && !counted) {
+                counted = true;
+                document.querySelectorAll('[data-count]').forEach(el => {
+                    const target = parseInt(el.dataset.target);
+                    const suffix = el.dataset.suffix || '';
+                    const duration = 1400;
+                    const start = performance.now();
+                    function tick(now) {
+                        const p = Math.min((now - start) / duration, 1);
+                        const eased = 1 - Math.pow(1 - p, 3);
+                        el.textContent = Math.round(target * eased) + suffix;
+                        if (p < 1) requestAnimationFrame(tick);
+                    }
+                    requestAnimationFrame(tick);
+                });
+            }
+        });
+    }, { threshold: 0.5 });
+    const aboutGrid = document.querySelector('.about-grid');
+    if (aboutGrid) countObserver.observe(aboutGrid);
+
+    // ══════════ MODAL ══════════
+    const projectData = [
+        {
+            title: '上海电气 · 泛人型机器人开发',
+            meta: '2025.11 — 2026.05 ｜ 项目负责人',
+            points: [
+                '对接甲方需求并预判风险，将复杂要求转化为详细的功能清单，确保项目权责清晰且按时交付。',
+                '主导外观设计与材料选型，协调团队进行干涉校验，在保证机械伸缩顺畅的同时实现美感与量产平衡。'
+            ]
+        },
+        {
+            title: '安井食品 · 生产执行与智能排产 APS 系统',
+            meta: '2025.09 — 2025.12 ｜ 产品负责人',
+            points: [
+                '深入调研工厂全工序，将复杂的现场业务用语转化为 <span class="hl">50 项标准化系统字段</span>，完成从物理工厂到数字模型的精准映射。',
+                '主导设计全流程自动排产功能，将原本 <span class="hl">4 小时人工计算缩短至 15 分钟</span>，准确率提升至 <span class="hl">95% 以上</span>。'
+            ]
+        },
+        {
+            title: '红色文化 · 文创产品 AIGC 大模型平台',
+            meta: '2024.11 — 2025.07 ｜ 产品负责人',
+            points: [
+                '负责馆方素材的标签化处理，构建包含 <span class="hl">1.5 万条数据、120 个关键词</span> 的知识库，为模型训练提供精准的数据支撑。',
+                '产出多版本高保真原型，推动红色文化资源从符号提取到智能化创意生成的转化，实现了平台核心交互流程的闭环设计。'
+            ]
+        }
+    ];
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalContent = document.getElementById('modalContent');
+
+    function openModal(html) {
+        modalContent.innerHTML = html;
+        modalOverlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        modalOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    modalOverlay.addEventListener('click', e => {
+        if (e.target === modalOverlay) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', function() {
+            // 安井项目：跳转到 Demo
+            if (this.dataset.project === '1') {
+                window.open('http://localhost:3000/', '_blank');
+                return;
+            }
+            const d = projectData[parseInt(this.dataset.project)];
+            if (!d) return;
+            openModal(`
+                <div class="modal-head">
+                    <div>
+                        <h3>${d.title}</h3>
+                        <p class="modal-sub">${d.meta}</p>
+                    </div>
+                    <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';">✕</button>
+                </div>
+                <div class="modal-body"><ul>${d.points.map(p => `<li>${p}</li>`).join('')}</ul></div>
+            `);
+        });
+    });
+
+    console.log('%c🚀 史云浩 %c· %c产品经理 %c· %c智能制造',
+        'color:#2563eb;font-size:16px;font-weight:bold;',
+        '', 'color:#2563eb;', '', 'color:#60a5fa;');
+    console.log('%c特效清单: 自定义光标+拖尾 | 粒子连线 | 3D倾斜 | 光标追踪光晕 | 浮动光球 | 数字滚动 | 渐变发光', 'color:#888;font-size:11px;');
+    // ══════════ COPY TO CLIPBOARD (v5) ══════════
+    document.querySelectorAll('.copy-target').forEach(el => {
+        el.addEventListener('click', () => {
+            navigator.clipboard.writeText(el.dataset.copy).then(() => {
+                const tip = el.querySelector('.copy-tip');
+                if (tip) {
+                    tip.classList.add('show');
+                    setTimeout(() => tip.classList.remove('show'), 1500);
+                }
+            });
+        });
+    });
+
+    // ══════════ NAV SMOOTH SCROLL (v5) ══════════
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                const top = target.getBoundingClientRect().top + window.scrollY - 70;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+        });
+    });
+    })();
+    </script>
+</body>
+</html>
