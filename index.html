@@ -730,25 +730,6 @@
         .project-card:hover .project-hint svg { transform: translateX(4px); }
 
         /* ── 安井 Demo 项目炫酷特效 ── */
-        .project-card.demo-card {
-            border-color: var(--accent-2);
-            box-shadow: 0 0 20px rgba(37,99,235,0.12), 0 0 0 1px rgba(37,99,235,0.08);
-        }
-        .project-card.demo-card::before {
-            opacity: 0.6 !important;
-            background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(96,165,250,0.2), rgba(37,99,235,0.1)) !important;
-        }
-        .demo-badge {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 10px; font-weight: 700; letter-spacing: 1px;
-            background: var(--accent); color: #fff;
-            padding: 3px 10px; border-radius: 20px;
-            animation: demoPulse 2s ease-in-out infinite;
-        }
-        @keyframes demoPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.5); }
-            50% { box-shadow: 0 0 0 8px rgba(37,99,235,0); }
-        }
         .demo-card .project-hint {
             opacity: 1 !important; transform: translateX(0) !important;
             background: linear-gradient(135deg, var(--accent), var(--accent-2));
@@ -1101,7 +1082,6 @@
                 <div class="project-card demo-card reveal" data-project="1" data-mouse-track data-tilt-card style="cursor:pointer">
                     <div class="project-top">
                         <h3 class="project-name">安井食品 · 智能排产 APS 系统</h3>
-                        <span class="demo-badge">🚀 在线体验</span>
                         <span class="project-badge">产品负责人</span>
                         <span class="project-time">2025.09 — 2025.12</span>
                     </div>
