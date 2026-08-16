@@ -12,6 +12,7 @@ const projects = [
     name: "课题组科研协作平台",
     description:
       "针对论文版本分散、批注反馈低效、科研资料难以统一管理等问题，参与课题组论文审阅与知识协作平台建设。",
+    url: "https://boxoking.github.io/lab-thesis-demo/",
     image: asset("images/research-collaboration-base.jpg"),
     hoverImage: asset("images/research-collaboration-platform.png"),
     imageAlt: "课题组学术交流与科研协作现场",

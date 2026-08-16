@@ -82,9 +82,14 @@ export default function Projects() {
             >
               <span>APS排产软件Demo</span>
             </a>
-            <div className="projects-demo-item">
+            <a
+              className="projects-demo-item projects-demo-item--link"
+              href={projects[1].url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span>{projects[1].name}</span>
-            </div>
+            </a>
           </div>
         </div>
 
