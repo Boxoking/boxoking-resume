@@ -52,8 +52,7 @@ export default function Header() {
           <a
             href={asset("files/Neil-Shi-Resume.pdf")}
             className="header-resume-btn"
-            target="_blank"
-            rel="noopener noreferrer"
+            download="史云浩简历.pdf"
           >
             下载简历
           </a>

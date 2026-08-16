@@ -101,8 +101,7 @@ export default function Experience() {
           <a
             className="exp-consult-btn"
             href={asset("files/Neil-Shi-Resume.pdf")}
-            target="_blank"
-            rel="noopener noreferrer"
+            download="史云浩简历.pdf"
           >
             <span className="exp-consult-icon">
               <svg
