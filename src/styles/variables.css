@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap');
+
+:root {
+  /* ===== 颜色 ===== */
+  --color-primary: #2563eb;
+  --color-primary-light: #dbeafe;
+  --color-primary-dark: #1d4ed8;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f1f4f6;
+  --color-bg-hero: #eef1f4;
+  --color-text: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-heading: #0f172a;
+  --color-border: #e2e8f0;
+  --color-card-bg: #ffffff;
+  --color-card-shadow: rgba(0, 0, 0, 0.06);
+  --color-hero-capsule-dark: #0b2d5f;
+  --color-soft-section: #eceff1;
+
+  /* ===== 排版 ===== */
+  --font-sans: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 3rem;
+  --line-height: 1.6;
+
+  /* ===== 间距 ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ===== 布局 ===== */
+  --max-width: 1180px;
+  --content-width-narrow: 800px;
+  --content-width-medium: 1000px;
+  --page-padding: clamp(20px, 4.25vw, 68px);
+  --page-padding-small: clamp(16px, 4vw, 24px);
+  --hero-height: calc(100svh - 16px);
+  --header-height: 80px;
+  --scroll-margin: 80px;
+
+  /* ===== 圆角 ===== */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ===== 过渡 ===== */
+  --transition: 0.2s ease;
+}

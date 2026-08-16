@@ -1,0 +1,29 @@
+/* ==========================================
+   Global responsive rules
+   ========================================== */
+
+/* ≤900px: narrow screen — single column mode */
+@media (max-width: 900px) {
+  section {
+    padding-left: var(--page-padding-small);
+    padding-right: var(--page-padding-small);
+  }
+}
+
+/* 手机端 */
+@media (max-width: 768px) {
+  section {
+    padding: var(--space-3xl) var(--page-padding-small);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Narrow width or short height: natural doc flow */
+@media (max-width: 1099px), (max-height: 759px) {
+  section {
+    padding: var(--space-2xl) clamp(16px, 4vw, 24px);
+  }
+}
